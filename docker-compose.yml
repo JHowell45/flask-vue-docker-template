@@ -1,34 +1,45 @@
 version: "3"
 services:
-  nginx:
-    image: nginx:alpine
-    container_name: nginx
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-    ports:
-      - 80:80
-    depends_on:
-      - backend
-      - frontend
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    image: backend
     container_name: backend
     volumes:
       - ".:/backend/app"
-    image: backend
     networks:
       my-network:
         aliases:
-          - backend
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: frontend
+          - flask-api
+    ports:
+      - 8000:8000
+
+  #frontend:
+  #  build:
+  #    context: ./frontend
+  #    dockerfile: Dockerfile
+  #  container_name: frontend
+  #  hostname: frontend
+  #  volumes:
+  #    - ".:/frontend/app"
+  #    - "/app/node_modules"
+  #  image: frontend
+  #  networks:
+  #    - frontend-nginx-network
+  #  expose:
+  #    - 80
+  nginx:
+    image: nginx:1.13.7
+    container_name: nginx
+    depends_on:
+      - backend
     volumes:
-      - ".:/frontend/app"
-    image: frontend
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - my-network
 networks:
   my-network:
