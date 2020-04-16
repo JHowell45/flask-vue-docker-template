@@ -7,7 +7,9 @@ services:
     image: backend
     container_name: backend
     volumes:
-      - ".:/backend/app"
+      - "./backend:/app"
+    command: "pipenv run gunicorn -c gunicorn_config.py wsgi:app"
+
     networks:
       flask-vue-network:
         aliases:
