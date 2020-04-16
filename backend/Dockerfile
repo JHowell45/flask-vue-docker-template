@@ -11,9 +11,4 @@ RUN pip install pipenv
 WORKDIR /app
 
 ## Install requirements:
-COPY Pipfile Pipfile.lock ./
 RUN pipenv install --deploy
-
-COPY . /app
-
-CMD ["pipenv", "run", "gunicorn", "-c", "gunicorn_config.py", "wsgi:app"]
