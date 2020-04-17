@@ -11,4 +11,5 @@ RUN pip install pipenv
 WORKDIR /app
 
 ## Install requirements:
+COPY Pipfile Pipfile.lock ./
 RUN pipenv install --deploy
